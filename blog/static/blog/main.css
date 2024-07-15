@@ -76,3 +76,51 @@ article-metadata a:hover {
   color: white;
 }
 
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.like-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.like-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+    transition: transform 0.2s ease;
+}
+
+.like-button:focus {
+    outline: none;
+}
+
+.like-icon {
+    width: 24px;
+    height: 24px;
+    fill: #888;
+    transition: fill 0.2s ease;
+}
+
+.like-button.liked .like-icon {
+    fill: #e0245e; /* Color when liked */
+}
+
+.like-counter {
+    font-size: 16px;
+    color: #333;
+}
+
+.like-button.clicked {
+    transform: scale(1.2);
+}
+
