@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
-from .models import Post, Like
+from .models import Post
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -67,14 +67,6 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
         
-@login_required
-def like_post(request):
-    post_id = request.POST.get('post_id')
-    post = get_object_or_404(Post, id=post_id)
-    like, created = Like.objects.get_or_create(user=request.user, post=post)
-    if not created:
-        like.delete()
-    return JsonResponse({'liked': created, 'likes_count': post.total_likes()})
-
+    
 def about(request):
     return render(request, 'blog/about.html',{'title' : 'About Page'})
