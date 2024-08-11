@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.models import User
 from .models import Post, Like
+from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -68,13 +69,23 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return False
         
 @login_required
-def like_post(request):
-    post_id = request.POST.get('post_id')
+def like_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    like, created = Like.objects.get_or_create(user=request.user, post=post)
-    if not created:
-        like.delete()
-    return JsonResponse({'liked': created, 'likes_count': post.total_likes()})
+    user = request.user
+
+    # Check if the user has already liked the post
+    if Like.objects.filter(user=user, post=post).exists():
+        # If like exists, unlike the post
+        Like.objects.filter(user=user, post=post).delete()
+        liked = False
+    else:
+        # Otherwise, create a new like
+        Like.objects.create(user=user, post=post)
+        liked = True
+
+    # Return a JSON response indicating success
+    return JsonResponse({'liked': liked, 'likes_count': post.likes_count})
+   
 
 def about(request):
     return render(request, 'blog/about.html',{'title' : 'About Page'})

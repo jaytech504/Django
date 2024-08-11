@@ -1,8 +1,7 @@
 body {
   background: #e8eaf0;
   color: #333333;
-  margin-top: 4rem;
-  
+  margin-top: 5rem;
 }
 h1, h2, h3, h4, h5, h6 {
   color: #444444;
@@ -169,23 +168,26 @@ a.article-title:hover {
   align-items: center;
 }
 
-#like-button {
-  font-size: 1.5rem;
+.like-btn {
+  font-size: 1rem;
   cursor: pointer;
-  margin-right: 0.5rem;
-  transition: color 0.3s ease;
+  background: transparent;
+  border: none;
 }
 
-#like-button.far {
-  color: #ccc;
+
+.like-btn .far {
+  color: #657786;
+  cursor: pointer;
 }
 
-#like-button.fas {
+.like-btn .fas {
   color: #e0245e;
+  cursor: pointer;
 }
 
-#like-count {
-  font-size: 1.2rem;
+.like-count {
+  font-size: 1rem;
 }
 
 .dropdown {

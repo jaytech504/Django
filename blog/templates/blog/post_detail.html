@@ -14,6 +14,52 @@
     </div>
     <h2 class="article-title">{{ object.title }}</h2>
     <p class="article-content">{{ object.content }}</p>
+    <button class="like-btn" data-post-id="{{ post.id }}">
+      <i class="fa-heart 
+      {% if user in post.likes.all %}
+            fas
+        {% else %}
+            far
+        {% endif %}" ></i>
+      <span class="like-count">{{ post.likes_count }}</span>
+  </button>
   </div>
 </article>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $('.like-btn').click(function(e) {
+        e.preventDefault();
+        var postId = $(this).data('post-id');
+        var csrfToken = '{{ csrf_token }}';
+        var $button = $(this);
+        var $icon = $button.find('.fa-heart');
+        var $likeCount = $button.find('.like-count');
+
+        $.ajax({
+            type: 'POST',
+            url: '/like-post/' + postId + '/',
+            data: {'csrfmiddlewaretoken': csrfToken},
+            dataType: 'json',
+            success: function(response) {
+              if (response.liked) {
+                    $icon.removeClass('far').addClass('fas');// Filled heart
+                    $icon.css('color', '#e0245e');
+                } else {
+                    $icon.removeClass('fas').addClass('far');// Unfilled heart
+                    $icon.css('color', '#657786');
+                }
+                console.log($icon.attr('class'));
+                $likeCount.text(response.likes_count);
+
+            },
+            error: function(xhr, status, error) {
+              console.error('AJAX Error:', status, error);
+              
+            }
+        });
+    });
+});
+</script>
 {% endblock content %}
