@@ -149,8 +149,8 @@ a.article-title:hover {
   vertical-align: middle;
 }
 .account-img {
-  height: 125px;
-  width: 125px;
+  height: 85px;
+  width: 85px;
   margin-right: 20px;
   margin-bottom: 16px;
 }
@@ -239,9 +239,4 @@ a.article-title:hover {
 .dropdown-content a i {
   margin-right: 10px;
 }
-@media (max-width: 450px) {
-  .dropdown {
-    margin-top: 10px;
-  }
-  
-}
+

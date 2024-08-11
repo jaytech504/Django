@@ -1,8 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.models import User
+<<<<<<< HEAD
 from .models import Post, Like
 from django.views.decorators.http import require_POST
+=======
+from .models import Post
+>>>>>>> 601df15711a50d75aace9674a67320988dad997d
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
