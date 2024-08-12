@@ -3,23 +3,46 @@
 {% block content %}
 	<div class="content-section">
     <div class="media">
-        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+            <img id="profileImage" src="{{ user.profile.image.url }}" class="rounded-circle account-img" alt="Profile Image" >
+            
         <div class="media-body">
-            <h2 class="account-heading">{{ user.username }}</h2>
+            <h3 class="account-heading">{{ user.username }}</h3>
             <p class="text-secondary">{{ user.email }}</p>
         </div>
     </div>
-    <form method="POST" enctype="multipart/form-data">
+    <div class="col-md-8">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Profile Info</legend>
-                {{ u_form|crispy }}
-                {{ p_form|crispy }}
-            </fieldset>
+            <legend class="border-bottom mb-4">Profile Info</legend>
             <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Update</button>
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
             </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+            </div>
+            <div class="form-group">
+            <input type="file" id="imageUpload" name="image" accept="image/*" class="form-control-file mt-3" style="display: none;" onchange="previewImage(event)">
+            <button type="button" class="change-prof" onclick="document.getElementById('imageUpload').click();">
+                Change Profile Picture
+            </button>
+            </div>
+        
+            <button type="submit" class="btn btn-outline-info">Update Profile</button>
         </form>
     </div>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                const output = document.getElementById('profileImage');
+                output.src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
 
 {% endblock content %}

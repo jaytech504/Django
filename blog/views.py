@@ -1,23 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.models import User
-<<<<<<< HEAD
 from .models import Post, Like
 from django.views.decorators.http import require_POST
-=======
-from .models import Post
->>>>>>> 601df15711a50d75aace9674a67320988dad997d
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 # Create your views here.
-
-def home(request):
-    context = {
-        'posts' : Post.objects.all()
-    }
-    return render(request, 'blog/home.html', context)
-
 
 class PostListView(ListView):
     model = Post
@@ -89,7 +79,6 @@ def like_post(request, post_id):
 
     # Return a JSON response indicating success
     return JsonResponse({'liked': liked, 'likes_count': post.likes_count})
-   
 
 def about(request):
     return render(request, 'blog/about.html',{'title' : 'About Page'})

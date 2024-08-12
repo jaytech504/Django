@@ -12,6 +12,10 @@
     </div>
     <h4><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h4>
     <p class="article-content">{{ post.content }}</p>
+    <span class="like-btn" data-post-id="{{ post.id }}">
+      <i class="fa-heart far" ></i>
+      <span class="like-count">{{ post.likes_count }}</span>
+    </span>
 </div>
   
 </article>

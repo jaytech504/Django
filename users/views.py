@@ -17,7 +17,7 @@ def register(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f'Account successfully created for { username }! You can Login now.')
-                return redirect('logi', user_id=user.id)
+                return redirect('login')
     else:
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
