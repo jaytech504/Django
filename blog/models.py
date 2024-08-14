@@ -16,13 +16,13 @@ class Post(models.Model):
     def get_absolute_url(self):
     	return reverse('post-detail', kwargs={'pk': self.pk})
 
-    @property
     def likes_count(self):
         return self.like_set.count()
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-
+    created_at = models.DateTimeField(default=timezone.now)
+    
     class Meta:
         unique_together = ('user', 'post')

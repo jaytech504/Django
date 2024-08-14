@@ -11,8 +11,41 @@
     </div>
     <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
     <p class="article-content">{{ post.content }}</p>
+    <span class="like-btn" 
+            data-post-id="{{ post.id }}">
+        {% if user.is_authenticated and post.id in user_likes %}
+            <i class="fa-heart fas"></i>
+        {% else %}
+            <i class="fa-heart far"></i>
+        {% endif %}
+  </span>
+    <span id="like-count-{{ post.id }}">{{ post.like_set.count }}</span>
   </div>
 </article>
 
     {% endfor %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script type="text/javascript">
+      $(document).ready(function(){
+          $('.like-btn').click(function(){
+              var postId = $(this).data('post-id');
+              var button = $(this);
+  
+              $.ajax({
+                  url: '/like/' + postId + '/',
+                  method: 'POST',
+                  headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                  success: function(response){
+                      if(response.liked){
+                          button.html('<i class="fa-heart fas"></i>');
+                      } else {
+                          button.html('<i class="fa-heart far"></i>');
+                      }
+                      $('#like-count-' + postId).text(response.like_count);
+                  }
+              });
+          });
+      });
+  </script>
 {% endblock content %}
