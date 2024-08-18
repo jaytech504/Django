@@ -1,0 +1,68 @@
+{% extends "blog/base.html" %}
+{%load crispy_forms_tags %}
+{% block content %}
+	<div class="content-section">
+    <div class="media">
+            <img id="profileImage" src="{{ user.profile.image.url }}" class="rounded-circle account-img" alt="Profile Image" >
+            
+        <div class="media-body" >
+<div class="row text-center mb-3" style="margin-top: 30px;">
+    <div class="col">
+            <span class="fw-bold">{{ followers_count }}</span>
+            <p><a href="{% url 'followers_following' user.username %}?tab=followers" class="mr-2">Followers</a></p>
+        </div>
+        <div class="col">
+            <span class="fw-bold">{{ following_count }}</span>
+            <p><a href="{% url 'followers_following' user.username %}?tab=following" class="mr-2">Following</a></p>
+        </div>
+        <div class="col">
+            <span class="fw-bold">{{ post_count }}</span>
+            <p><a href="{% url 'user-posts' user.username %}" class="mr-2">Posts</a></p>
+        </div>
+    </div>
+</div>
+    </div>
+    <div style="margin-left: 20px;">
+    <h3 class="account-heading">{{ user.username }}</h3>
+            <p class="text-secondary">{{ user.email }}</p>
+            <p>{{ user.profile.bio }}</p>
+    </div>
+    <div class="col-md-8">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <legend class="border-bottom mb-4">Profile Info</legend>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+            </div>
+            <div class="form-group">
+                <label for="id_bio">Bio</label>
+                <input type="text" class="form-control" id="bio" name="bio" value="{{ user.profile.bio }}">
+            </div>
+            <div class="form-group">
+            <input type="file" id="imageUpload" name="image" accept="image/*" class="form-control-file mt-3" style="display: none;" onchange="previewImage(event)">
+            <button type="button" class="change-prof" onclick="document.getElementById('imageUpload').click();">
+                Change Profile Picture
+            </button>
+            </div>
+        
+            <button type="submit" class="btn btn-outline-info">Update Profile</button>
+        </form>
+    </div>
+    </div>
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                const output = document.getElementById('profileImage');
+                output.src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+
+{% endblock content %}

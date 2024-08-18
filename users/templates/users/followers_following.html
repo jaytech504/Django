@@ -1,0 +1,52 @@
+{% extends "blog/base.html" %}
+{%load crispy_forms_tags %}
+{% block content %}
+
+<div class="container">
+
+    <!-- Tab navigation -->
+    <div class="tabs">
+        <a href="?tab=followers" class="{% if tab == 'followers' %}active-tab{% endif %}">Followers</a>
+        <a href="?tab=following" class="{% if tab == 'following' %}active-tab{% endif %}">Following</a>
+    </div>
+
+    <!-- Followers List -->
+    <div class="tab-content {% if tab == 'followers' %}active{% endif %}">
+        <ul class="profile-list">
+            {% for follow in followers %}
+                <li>
+                    <img src="{{ follow.follower.profile.image.url }}" alt="{{ follow.follower.username }}" class="profile-picture">
+                    <div class="profile-info">
+                        <a href="{% if follow.follower == request.user %}{% url 'my_profile' %}{% else %}{% url 'profile' follow.follower.username %}{% endif %}">
+                            {{ follow.follower.username }}
+                        </a>
+                        <span>{{ follow.follower.email }}</span>
+                    </div>
+                </li>
+            {% empty %}
+                <li>No followers yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Following List -->
+    <div class="tab-content {% if tab == 'following' %}active{% endif %}">
+        <ul class="profile-list">
+            {% for follow in following %}
+                <li>
+                    <img src="{{ follow.followed.profile.image.url }}" alt="{{ follow.followed.username }}" class="profile-picture">
+                    <div class="profile-info">
+                        <a href="{% if follow.followed == request.user %}{% url 'my_profile' %}{% else %}{% url 'profile' follow.followed.username %}{% endif %}">
+                            {{ follow.followed.username }}
+                        </a>
+                        <span>{{ follow.followed.email }}</span>
+                    </div>
+                </li>
+            {% empty %}
+                <li>Not following anyone yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% endblock content %}

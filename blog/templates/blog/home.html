@@ -7,11 +7,20 @@
         <img class="rounded-circle article-img"src="{{ post.author.profile.image.url}}">
   <div class="media-body">
     <div class="article-metadata">
-      <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+    {% if post.author == request.user %}
+        <a class="mr-2" href="{% url 'my_profile' %}">{{ post.author }}</a>
+    {% else %}
+        <a class="mr-2" href="{% url 'profile' post.author %}">{{ post.author }}</a>
+    {% endif %}
       <small class="text-muted">{{ post.date_posted }}</small>
     </div>
     <h4><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h4>
     <p class="article-content">{{ post.content }}</p>
+    {% if post.image %}
+        <div class="post-image-container">
+            <img src="{{ post.image.url }}" alt="Post image" class="post-image">
+        </div>
+    {% endif %}
     <span class="like-btn" 
             data-post-id="{{ post.id }}">
         {% if user.is_authenticated and post.id in user_likes %}

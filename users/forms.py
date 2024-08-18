@@ -20,8 +20,18 @@ class  UserUpdateForm(forms.ModelForm):
 
 			
 class ProfileUpdateForm(forms.ModelForm):
+	bio = forms.CharField(
+		widget=forms.Textarea(
+			attrs={
+				'class': 'form-control',
+				'placeholder': 'Tell us about you....',
+				'rows': 2,
+			}
+		),
+		required=False,
+	)
 	class Meta:
 		model = Profile
-		fields = ['image']
+		fields = ['bio', 'image']
 		
 			

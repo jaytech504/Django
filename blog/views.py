@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin 
 from django.views import View
+from users import models as user_models
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 # Create your views here.
 
@@ -55,7 +56,7 @@ class PostDetailView(DetailView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'content']
+    fields = ['title', 'content', 'image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -63,7 +64,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'content']
+    fields = ['title', 'content', 'image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -88,6 +89,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 @login_required
 def like_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
+    user = request.user
     liked = False
     try:
         like = Like.objects.get(user=request.user, post=post)
@@ -98,6 +100,14 @@ def like_post(request, post_id):
 
     like_count = post.like_set.count()
     return JsonResponse({'liked': liked, 'like_count': like_count})
+    if not user_models.Notification.objects.filter(recipient=post.author, sender=user, post=post, notification_type='like').exists():
+        user_models.Notification.objects.create(
+            recipient=post.author,
+            sender=user,
+            notification_type='like',
+            post=post
+        )
+    
 
 
 def about(request):
