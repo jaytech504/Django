@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'crispy_forms',
     'crispy_bootstrap4',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -72,6 +73,8 @@ TEMPLATES = [
         },
     },
 ]
+
+ASGI_APPLICATION = 'django_project9i.asgi.application'
 
 WSGI_APPLICATION = 'django_project.wsgi.application'
 

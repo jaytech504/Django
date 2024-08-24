@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from users import views as user_view
 from blog import views as blog_view
+from chat import views as chat_view
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.conf import settings
@@ -36,6 +37,8 @@ urlpatterns = [
     path('follow/<str:username>/', user_view.follow_user, name='follow_user'),
     path('followers-following/<str:username>/', user_view.followers_following, name='followers_following'),
     path('notifications/', user_view.notifications, name='notifications'),
+    path('chat/<int:conversation_id>/', chat_view.chat_view, name='chat'),
+    
 ]
 
 if settings.DEBUG:

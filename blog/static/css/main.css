@@ -419,3 +419,121 @@ a.article-title:hover {
 .notification-icon.follow {
   color: #1e90ff;
 }
+
+.chat-container {
+  width: 100%;
+  max-width: 600px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat-header {
+  background-color: #009688;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.chat-messages {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-message {
+  max-width: 60%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 20px;
+  position: relative;
+  font-size: 14px;
+}
+
+.chat-message.sent {
+  align-self: flex-end;
+  background-color: #dcf8c6;
+}
+
+.chat-message.received {
+  align-self: flex-start;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+}
+
+.message-content {
+  margin-bottom: 5px;
+}
+
+.message-time {
+  font-size: 10px;
+  color: #888888;
+  text-align: right;
+}
+
+.chat-input {
+  display: flex;
+  padding: 15px;
+  background-color: #ffffff;
+  border-top: 1px solid #dddddd;
+}
+
+.chat-input textarea {
+  flex-grow: 1;
+  border: none;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 20px;
+  resize: none;
+  outline: none;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.chat-input button {
+  background-color: #009688;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-left: 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chat-input button:hover {
+  background-color: #00796b;
+}
+
+@media (max-width: 600px) {
+  .chat-container {
+      width: 100%;
+      border-radius: 0;
+  }
+
+  .chat-header {
+      font-size: 16px;
+      padding: 10px;
+  }
+
+  .chat-message {
+      font-size: 13px;
+  }
+
+  .chat-input textarea {
+      font-size: 13px;
+  }
+
+  .chat-input button {
+      font-size: 13px;
+      padding: 8px 16px;
+  }
+}
