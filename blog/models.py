@@ -8,7 +8,7 @@ class Post(models.Model):
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='post_images', blank=True, null=True)
+    post_image = models.ImageField(upload_to='post_images', blank=True, null=True)
     likes = models.ManyToManyField(User, related_name='like_posts', blank=True)
     def __str__(self):
 

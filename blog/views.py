@@ -56,7 +56,7 @@ class PostDetailView(DetailView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'content', 'image']
+    fields = ['title', 'content', 'post_image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -64,7 +64,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'content', 'image']
+    fields = ['title', 'content', 'post_image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -89,7 +89,6 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 @login_required
 def like_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    user = request.user
     liked = False
     try:
         like = Like.objects.get(user=request.user, post=post)
@@ -97,17 +96,18 @@ def like_post(request, post_id):
     except Like.DoesNotExist:
         Like.objects.create(user=request.user, post=post)
         liked = True
+        if not user_models.Notification.objects.filter(recipient=post.author, sender=request.user, post=post, notification_type='like').exists():
+            if post.author != request.user:
+                user_models.Notification.objects.create(
+                    recipient=post.author,
+                    sender=request.user,
+                    notification_type='like',
+                    post=post
+                )
+    
 
     like_count = post.like_set.count()
     return JsonResponse({'liked': liked, 'like_count': like_count})
-    if not user_models.Notification.objects.filter(recipient=post.author, sender=user, post=post, notification_type='like').exists():
-        user_models.Notification.objects.create(
-            recipient=post.author,
-            sender=user,
-            notification_type='like',
-            post=post
-        )
-    
 
 
 def about(request):

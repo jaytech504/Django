@@ -145,7 +145,7 @@ a.article-title:hover {
 }
 .mr-2 {
   color: #000000;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font: 15px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 .article-metadata {
   padding-bottom: 1px;
@@ -195,6 +195,11 @@ a.article-title:hover {
   cursor: pointer;
   background: transparent;
   border: none;
+  margin-top: 10px;
+}
+
+.like1{
+  margin-top: 10px;
 }
 
 
@@ -221,7 +226,7 @@ a.article-title:hover {
   display: none;
   position: absolute;
   background-color: white;
-  min-width: 160px;
+  width: 200px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
   left: -70px;
@@ -287,7 +292,7 @@ a.article-title:hover {
 .profile-list li {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   padding: 10px;
   background-color: #ffffff;
   border-radius: 8px;
@@ -355,6 +360,62 @@ a.article-title:hover {
 
 .connect-btn {
   border-color: #00aced;
-  background: #00aced;
+  border-radius: 20px;
+  width: 180px;
+  padding-bottom: 10px;
+  padding-top: 5px;
+  margin: 10px 0;
+  height: 35px;
   color: #ffffff;
+  background-color: #00aced;
+  background-image: none;
+}
+@media (max-width: 576px){
+  .side-bar {
+    display: none;
+  }
+  
+}
+.notification-list {
+  list-style: none;
+  padding: 0;
+}
+.notification-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  border-bottom: 1px solid #dee2e6;
+}
+.notification-item:last-child {
+  border-bottom: none;
+}
+.notification-content {
+  display: flex;
+  align-items: center;
+}
+.notification-text {
+  flex-grow: 1;
+}
+.notification-text a {
+  color: #007bff;
+  text-decoration: none;
+}
+.notification-text a:hover {
+  text-decoration: underline;
+}
+.timestamp {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+.notification-icon {
+  color: #6c757d;
+  font-size: 1.5rem;
+  margin-left: 10px;
+}
+.notification-icon.like {
+  color: #ff4757;
+}
+.notification-icon.follow {
+  color: #1e90ff;
 }

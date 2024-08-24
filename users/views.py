@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -79,21 +79,22 @@ def user_profile(request, username):
 @login_required
 def follow_user(request, username):
     user_to_follow = get_object_or_404(User, username=username)
+    user = request.user
     if user_to_follow != request.user:
-        follow, created = Follow.objects.get_or_create(follower=request.user, followed=user_to_follow)
+        follow, created = Follow.objects.get_or_create(follower=user, followed=user_to_follow)
         if created:
+            if not Notification.objects.filter(recipient=user_to_follow, sender=user, notification_type='follow').exists():
+                Notification.objects.create(
+                    recipient=user_to_follow,
+                    sender=user,
+                    notification_type='follow',
+                )
             return JsonResponse({'status': 'followed'})
         else:
             follow.delete()
             return JsonResponse({'status': 'unfollowed'})
     return JsonResponse({'status': 'error'})
-    
-    if not Notification.objects.filter(recipient=user_to_follow, sender=follower, notification_type='follow').exists():
-            Notification.objects.create(
-            recipient=user_to_follow,
-            sender=user,
-            notification_type='Follow',
-        )
+
 
 def followers_following(request, username):
     # Get the user whose profile is being viewed
@@ -111,9 +112,8 @@ def followers_following(request, username):
     }
     return render(request, 'users/followers_following.html', context)
 
+@login_required
 def notifications(request):
-    notifications = request.user.notifications.filter(is_read=False)
+    notifications = request.user.notifications.all().order_by('-timestamp')
     context = {'notifications': notifications}
-
-    notifications.update(is_read=True)
     return render(request, 'users/notifications.html', context)

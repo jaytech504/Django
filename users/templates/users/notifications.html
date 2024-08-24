@@ -1,15 +1,28 @@
-<h2>Notifications</h2>
-<ul>
-    {% for notification in notifications %}
-        <li>
-            {% if notification.notification_type == 'like' %}
-                {{ notification.sender.username }} liked your post.
-            {% elif notification.notification_type == 'follow' %}
-                {{ notification.sender.username }} followed you.
-            {% endif %}
-            <span>{{ notification.timestamp }}</span>
-        </li>
-    {% empty %}
-        <li>No new notifications.</li>
-    {% endfor %}
-</ul>
+{% extends "blog/base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Notifications</h2>
+    <ul class="profile-list">
+        {% for notification in notifications %}
+            <li class="notification-item">
+                <div class="notification-content">
+                    <img src="{{ notification.sender.profile.image.url }}" alt="{{ notification.sender.username }}'s profile picture" class="profile-picture">
+                    <div class="notification-text">
+                        {% if notification.notification_type == 'like' %}
+                            <a href="{% url 'profile' notification.sender.username %}">{{ notification.sender.username }}</a> liked your post.
+                        {% elif notification.notification_type == 'follow' %}
+                            <a href="{% url 'profile' notification.sender.username %}">{{ notification.sender.username }}</a> followed you.
+                        {% else %}
+                            Unknown notification type.
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="timestamp">{{ notification.timestamp }}</div>
+            </li>
+        {% empty %}
+            <li class="notification-item">No new notifications.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock content %}

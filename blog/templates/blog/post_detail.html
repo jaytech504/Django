@@ -18,8 +18,13 @@
       </div>
       {% endif %}
     </div>
-    <h2 class="article-title">{{ object.title }}</h2>
+    <h5 class="article-title">{{ object.title }}</h5>
     <p class="article-content">{{ object.content }}</p>
+    {% if post.post_image %}
+        <div class="post-image-container">
+            <img src="{{ post.post_image.url }}" alt="Post image" class="post-image">
+        </div>
+    {% endif %}
     <span class="like-btn" 
             data-post-id="{{ post.id }}">
         {% if user.is_authenticated and user_liked %}
@@ -27,33 +32,9 @@
         {% else %}
             <i class="fa-heart far"></i>
         {% endif %}
-  </span>
+    </span>
     <span id="like-count-{{ post.id }}">{{ post.like_set.count }}</span>
 </div>
   </div>
 </article>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script type="text/javascript">
-      $(document).ready(function(){
-          $('.like-btn').click(function(){
-              var postId = $(this).data('post-id');
-              var button = $(this);
-  
-              $.ajax({
-                  url: '/like/' + postId + '/',
-                  method: 'POST',
-                  headers: {'X-CSRFToken': '{{ csrf_token }}'},
-                  success: function(response){
-                      if(response.liked){
-                          button.html('<i class="fa-heart fas"></i>');
-                      } else {
-                          button.html('<i class="fa-heart far"></i>');
-                      }
-                      $('#like-count-' + postId).text(response.like_count);
-                  }
-              });
-          });
-      });
-  </script>
 {% endblock content %}
