@@ -1,0 +1,26 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <h2>Your Chats</h2>
+    {% for conversation in conversations %}
+    <a href="{% url 'chat' conversation.participants.exclude(id=request.user.id).first.id %}" class="chat-item">
+        <div class="chat-details">
+            <div class="chat-name">{{ conversation.participants.exclude(id=request.user.id).first.username }}</div>
+            <div class="chat-preview">
+                {% with last_message=conversation.messages.last %}
+                    {{ last_message.text|truncatewords:5 }} - {{ last_message.timestamp|date:"M d, H:i" }}
+                {% endwith %}
+            </div>
+        </div>
+        {% if conversation.unread_count > 0 %}
+        <div class="unread-count">{{ conversation.unread_count }}</div>
+        {% endif %}
+    </a>
+    {% empty %}
+    <p>You have no active chats.</p>
+    {% endfor %}
+</div>
+
+{% endblock content %}

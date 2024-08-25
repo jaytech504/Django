@@ -37,7 +37,10 @@ urlpatterns = [
     path('follow/<str:username>/', user_view.follow_user, name='follow_user'),
     path('followers-following/<str:username>/', user_view.followers_following, name='followers_following'),
     path('notifications/', user_view.notifications, name='notifications'),
-    path('chat/<int:conversation_id>/', chat_view.chat_view, name='chat'),
+    path('chat/<int:user_id>/', chat_view.chat_view, name='chat'),
+    path('chat/<int:conversation_id>/send_message/', chat_view.send_message, name='send_message'),
+    path('chat/<int:conversation_id>/get_messages/', chat_view.get_messages, name='get_messages'),
+    path('chats/', chat_view.chat_list_view, name='chat_list'),
     
 ]
 

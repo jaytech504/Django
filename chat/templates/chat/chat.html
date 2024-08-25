@@ -1,0 +1,75 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="chat-container">
+    <div class="chat-header">
+        <img src="{{ other_user.profile.image.url }}" class="rounded-circle article-img">
+        <span>{{ other_user.username }}</span>
+    </div>
+
+    <div class="chat-box" id="chat-box">
+        {% for message in messages %}
+            <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+                {{ message.text }}<br>
+                <small style="color: black; text-align: end;">{{ message.timestamp|date:"H:i" }}</small>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="chat-footer">
+        <textarea id="message-input" rows="2" placeholder="Type a message..."></textarea>
+        <button id="send-button"><i class="fa fa-paper-plane"></i></button>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script type="text/javascript">
+    // Send message via AJAX
+    $('#send-button').on('click', function() {
+        var message = $('#message-input').val();
+        if (message.trim() === "") return;
+  
+        $.ajax({
+            url: "{% url 'send_message' conversation.id %}",
+            method: "POST",
+            data: {
+                'message': message,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                if (response.status === 'ok') {
+                    $('#message-input').val('');
+                    fetchMessages(); // Refresh messages after sending
+                }
+            }
+        });
+    });
+  
+    // Fetch messages via AJAX
+    function fetchMessages() {
+        $.ajax({
+            url: "{% url 'get_messages' conversation.id %}",
+            method: "GET",
+            success: function(response) {
+                var messages = JSON.parse(response.messages);
+                $('#chat-box').empty(); // Clear chat box
+                messages.forEach(function(message) {
+                    var messageHtml = '<div class="message ' + (message.fields.sender == {{ request.user.id }} ? 'sent' : 'received') + '">';
+                    messageHtml += message.fields.text + '<br>';
+                    messageHtml += '<small>' + new Date(message.fields.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + '</small>';
+                    messageHtml += '</div>';
+                    $('#chat-box').append(messageHtml);
+                });
+                $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight); // Scroll to the bottom
+            }
+        });
+    }
+  
+    // Polling for new messages every 5 seconds
+    setInterval(fetchMessages, 5000);
+  </script>
+
+
+{% endblock content %}

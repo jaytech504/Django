@@ -35,6 +35,7 @@
                       {% endif %}
                   </button>
                   {% endif %}
+                  <a href="{% url 'chat' user_profile.id %}" class="chat-link">Chat with {{ user_profile.username }}</a>
                 </div>
             </div>
         </div>

@@ -39,6 +39,7 @@
         <div class="navbar-nav">
           {% if user.is_authenticated %}
           <a href="{% url 'post-create' %}"><span class="btn btn-outline-info log-btn"> +  New Post </span></a>
+          <a href="{% url 'chat_list' %}"><span class="btn btn-outline-info"> Chats </span></a>
           <div class="dropdown">
             {% if user.profile.image.url %}
             <img src ="{{ user.profile.image.url }}" alt="{{ user.username }}" class="rounded-circle" width="38" height="38">

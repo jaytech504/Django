@@ -41,9 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
+    'chat.apps.ChatConfig',
     'crispy_forms',
     'crispy_bootstrap4',
-    'channels',
 ]
 
 MIDDLEWARE = [
@@ -73,8 +73,6 @@ TEMPLATES = [
         },
     },
 ]
-
-ASGI_APPLICATION = 'django_project9i.asgi.application'
 
 WSGI_APPLICATION = 'django_project.wsgi.application'
 
