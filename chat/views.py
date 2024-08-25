@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Conversation, Message
 from django.core import serializers
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Max
 
 
 
@@ -22,9 +22,9 @@ def chat_view(request, user_id):
     # Mark all messages from the other user as read
     conversation.messages.filter(sender=other_user, is_read=False).update(is_read=True)
 
-    messages = conversation.messages.all()
+    text_messages = conversation.messages.all()
 
-    return render(request, 'chat/chat.html', {'conversation': conversation, 'messages': messages, 'other_user': other_user})
+    return render(request, 'chat/chat.html', {'conversation': conversation, 'text_messages': text_messages, 'other_user': other_user})
 
 @require_POST
 @login_required
@@ -47,8 +47,18 @@ def get_messages(request, conversation_id):
 
 @login_required
 def chat_list_view(request):
-    conversations = Conversation.objects.filter(participants=request.user).annotate(
-        unread_count=Count('messages', filter=Q(messages__is_read=False, messages__sender__ne=request.user))
-    )
-    
-    return render(request, 'chat/chat_list.html', {'conversations': conversations})
+    conversations = Conversation.objects.filter(participants=request.user).annotate(last_message_time=Max('messages__timestamp')
+    ).annotate(
+        unread_count=Count('messages', filter=Q(messages__is_read=False) & ~Q(messages__sender=request.user))
+    ).order_by('-last_message_time')
+
+    chat_data = []
+    for conversation in conversations:
+        other_user = conversation.participants.exclude(id=request.user.id).first()
+        chat_data.append({
+            'conversation': conversation,
+            'other_user': other_user,
+            'last_message': conversation.messages.order_by('-timestamp').first(),
+            'unread_count': conversation.unread_count,
+        })
+    return render(request, 'chat/chat_list.html', {'chat_data': chat_data})

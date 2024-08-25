@@ -2,25 +2,35 @@
 {% load static %}
 {% block content %}
 
-<div class="container">
-    <h2>Your Chats</h2>
-    {% for conversation in conversations %}
-    <a href="{% url 'chat' conversation.participants.exclude(id=request.user.id).first.id %}" class="chat-item">
+<div class="chatlist-container">
+    {% for chat in chat_data %}
+    <a href="{% url 'chat' chat.other_user.id %}" class="chat-item">
+        <div class="chat-image">
+            <!-- Placeholder for profile image -->
+            <img src="{{ chat.other_user.profile.image.url }}" alt="Profile Picture">
+        </div>
         <div class="chat-details">
-            <div class="chat-name">{{ conversation.participants.exclude(id=request.user.id).first.username }}</div>
+            <div class="chat-info">
+                <div class="chat-name">{{ chat.other_user.username }}</div>
+                <div class="chat-time">{{ chat.last_message.timestamp|date:"h:i A" }}</div>
+            </div>
             <div class="chat-preview">
-                {% with last_message=conversation.messages.last %}
-                    {{ last_message.text|truncatewords:5 }} - {{ last_message.timestamp|date:"M d, H:i" }}
-                {% endwith %}
+                {% if chat.last_message %}
+                    {% if chat.last_message.image %}
+                        <img src="{{ chat.last_message.image.url }}" alt="Image" width="20">
+                    {% endif %}
+                    {{ chat.last_message.text|truncatewords:5 }}
+                {% else %}
+                    No messages yet.
+                {% endif %}
+                {% if chat.unread_count > 0 %}
+                <div class="unread-count">{{ chat.unread_count }}</div>
+                {% endif %}
             </div>
         </div>
-        {% if conversation.unread_count > 0 %}
-        <div class="unread-count">{{ conversation.unread_count }}</div>
-        {% endif %}
     </a>
     {% empty %}
     <p>You have no active chats.</p>
     {% endfor %}
 </div>
-
 {% endblock content %}
