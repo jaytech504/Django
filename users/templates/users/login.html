@@ -18,7 +18,8 @@
             </div>
         </form>
         <div class="or-divider">or</div>
-        <a href="#" class="google-button">
+        {% load socialaccount %}
+        <a href="{% provider_login_url 'google' %}?process=login" class="google-button">
             <img src="https://www.google.com/favicon.ico" alt="Google logo" width="20" height="20">
             Continue with Google
         </a>

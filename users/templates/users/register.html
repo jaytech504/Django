@@ -12,6 +12,12 @@
                 <button class="btn btn-outline-info" type="submit">Sign Up</button>
             </div>
         </form>
+        <div class="or-divider">or</div>
+        {% load socialaccount %}
+        <a href="{% provider_login_url 'google' %}?process=login" class="google-button">
+            <img src="https://www.google.com/favicon.ico" alt="Google logo" width="20" height="20">
+            Continue with Google
+        </a>
         <div class="border-top pt-3">
             <small class="text-muted">
                 Already Have An Account? <a class="ml-2" href="{% url 'login' %}">Sign In</a>

@@ -41,6 +41,7 @@ urlpatterns = [
     path('chat/<int:conversation_id>/send_message/', chat_view.send_message, name='send_message'),
     path('chat/<int:conversation_id>/get_messages/', chat_view.get_messages, name='get_messages'),
     path('chats/', chat_view.chat_list_view, name='chat_list'),
+    path('accounts/', include('allauth.urls')),
     
 ]
 
