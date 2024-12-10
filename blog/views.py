@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.models import User
 from .models import Post, Like
+from .forms import CommentForm
+from django.urls import reverse
 from django.db.models import Exists, OuterRef
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
@@ -48,10 +50,24 @@ class PostDetailView(DetailView):
     context_object_name = 'post'
 
     def get_context_data(self, **kwargs):
+        post = self.get_object()
         context = super().get_context_data(**kwargs)
+        context['comments'] = post.comments.all()
+        context['form'] = CommentForm()
         if self.request.user.is_authenticated:
             context['user_liked'] = Like.objects.filter(user=self.request.user, post=self.object).exists()
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.post = self.object
+            comment.save()
+            return redirect(reverse('post-detail', kwargs={'pk': self.object.pk}))
+        return self.get(request, *args, **kwargs)
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
