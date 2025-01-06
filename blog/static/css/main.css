@@ -202,6 +202,9 @@ a.article-title:hover {
   margin-top: 10px;
 }
 
+.like-btn i:hover {
+  color: #e0245e;
+}
 
 .like-btn .far {
   color: #657786;
@@ -370,12 +373,7 @@ a.article-title:hover {
   background-color: #00aced;
   background-image: none;
 }
-@media (max-width: 576px){
-  .side-bar {
-    display: none;
-  }
   
-}
 .notification-list {
   list-style: none;
   padding: 0;
@@ -406,7 +404,7 @@ a.article-title:hover {
 }
 .timestamp {
   color: #6c757d;
-  font-size: 0.875rem;
+  font-size: 0.7rem;
 }
 .notification-icon {
   color: #6c757d;
@@ -607,6 +605,51 @@ a.article-title:hover {
 
 
 /* General styles for the comment section */
+.comment-box {
+  padding: 15px;
+  height: 400px;
+  overflow-y: auto;
+  background: white;
+}
+
+.comment-footer {
+  padding: 10px;
+  background: #f7f7f7;
+  display: flex;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.comment-footer button {
+  background: #0084b4;
+  color: #fff;
+  border: none;
+  padding: 2px;
+  border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+  height: 35px;
+}
+
+.com-btn {
+  margin-left: 20px;
+}
+
+.com-btn a {
+  color: black;
+}
+
+.com-btn a:hover {
+  color: #0084b4;
+}
+
+.comment-input {
+  border-radius: 5px;
+  border: 1px solid black;
+  padding: 5px;
+  height: 40px;
+}
+
 .comments-section {
   margin-top: 2rem;
   padding: 1rem;

@@ -31,6 +31,7 @@
             {% endif %}
         </span>
         <span id="like-count-{{ post.id }}">{{ post.like_set.count }}</span>
+        <span class="com-btn"><a href="{% url 'post-detail' post.id %}"><i class="bi bi-chat"></i></a></span>
     </div>
 </div>
   
@@ -38,3 +39,32 @@
 
     {% endfor %}
 {% endblock content %}
+
+{% block side %}
+<div class="col-md-4 side-bar">
+    <div class="content-section">
+<h4>Notifications</h4>
+    <ul class="profile-list">
+        {% for notification in notifications %}
+            <li class="notification-item">
+                <div class="notification-content">
+                    <img src="{{ notification.sender.profile.image.url }}" alt="{{ notification.sender.username }}'s profile picture" class="profile-picture">
+                    <div class="notification-text">
+                        {% if notification.notification_type == 'like' %}
+                            <a href="{% url 'profile' notification.sender.username %}">{{ notification.sender.username }}</a> liked your post.
+                        {% elif notification.notification_type == 'follow' %}
+                            <a href="{% url 'profile' notification.sender.username %}">{{ notification.sender.username }}</a> followed you.
+                        {% else %}
+                            Unknown notification type.
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="timestamp">{{ notification.timestamp }}</div>
+            </li>
+        {% empty %}
+            <li class="notification-item">No new notifications.</li>
+        {% endfor %}
+    </ul>
+</div>
+</div>
+{% endblock %}

@@ -36,14 +36,23 @@
     </span>
     <span id="like-count-{{ post.id }}">{{ post.like_set.count }}</span>
 </div>
-<div class="comments-section">
+</article>
+{% endblock content %}
+
+{% block side %}
+<div class="col-md-4 side-bar">
+    <div class="content-section">
   <h5>Comments</h5>
-  <div>
+  <div class="comment-box" id="comment-box">
       {% for comment in comments %}
           <div class="comment">
-              <div class="comment-avatar"></div>
+              <div class="comment-avatar"><img class="rounded-circle" width="40px" height="40px" src="{{ comment.user.profile.image.url }}"></div>
               <div class="comment-content">
-                  <strong>{{ comment.user.username }}</strong>
+                {% if comment.user == user %}
+                  <strong><a href="{% url 'my_profile' %}">{{ comment.user.username }}</a></strong>
+                {% else %}
+                  <strong><a href="{% url 'profile' comment.user.username %}">{{ comment.user.username }}</a></strong>
+                {% endif %}
                   <small>{{ comment.timestamp|date:"F j, Y, g:i a" }}</small>
                   <p>{{ comment.content }}</p>
               </div>
@@ -54,17 +63,19 @@
   </div>
 
   {% if user.is_authenticated %}
+    <div class="comment-footer">
       <div class="comment-form">
-          <h4>Leave a comment:</h4>
           <form method="POST">
               {% csrf_token %}
-              {{ form|crispy }}
-              <button type="submit">Submit</button>
+              <input type="text" name="content" placeholder="Add your comment..." class="comment-input">
+              <button type="submit"><i class="fa fa-paper-plane"></i></button>
           </form>
       </div>
+    </div>
   {% else %}
       <p><a href="{% url 'login' %}">Login</a> to leave a comment.</p>
   {% endif %}
-</div>
-</article>
-{% endblock content %}
+  </div>
+  </div>
+
+{% endblock %}

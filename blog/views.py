@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin 
 from django.views import View
+from users.models import Notification
 from users import models as user_models
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 # Create your views here.
@@ -19,12 +20,15 @@ class PostListView(ListView):
     template_name = 'blog/home.html'
     context_object_name = 'posts'
     ordering = ['-date_posted']
+        
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             user_likes = Like.objects.filter(user=self.request.user).values_list('post_id', flat=True)
             context['user_likes'] = user_likes
+            notifications = Notification.objects.filter(recipient=self.request.user).order_by('-timestamp')
+            context['notifications'] = notifications
         return context
     
 
@@ -52,7 +56,7 @@ class PostDetailView(DetailView):
     def get_context_data(self, **kwargs):
         post = self.get_object()
         context = super().get_context_data(**kwargs)
-        context['comments'] = post.comments.all()
+        context['comments'] = post.comments.all().order_by('-timestamp')
         context['form'] = CommentForm()
         if self.request.user.is_authenticated:
             context['user_liked'] = Like.objects.filter(user=self.request.user, post=self.object).exists()
