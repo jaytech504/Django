@@ -14,19 +14,7 @@
                 <div class="chat-name">{{ chat.other_user.username }}</div>
                 <div class="chat-time">{{ chat.last_message.timestamp|date:"h:i A" }}</div>
             </div>
-            <div class="chat-preview">
-                {% if chat.last_message %}
-                    {% if chat.last_message.image %}
-                        <img src="{{ chat.last_message.image.url }}" alt="Image" width="20">
-                    {% endif %}
-                    {{ chat.last_message.text|truncatewords:5 }}
-                {% else %}
-                    No messages yet.
-                {% endif %}
-                {% if chat.unread_count > 0 %}
-                <div class="unread-count">{{ chat.unread_count }}</div>
-                {% endif %}
-            </div>
+            
         </div>
     </a>
     {% empty %}
