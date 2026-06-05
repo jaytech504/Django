@@ -12,12 +12,7 @@
         <a class="mr-2" href="{% url 'profile' object.author.username %}">{{ object.author }}</a>
         {% endif %}
       <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
-      {% if object.author == user %}
-      <div class="d-inline float-right">
-        <a class="btn btnedit" href="{% url 'post-update' object.id %}"><i class="far fa-edit"></i></a>
-        <a class="btn btndel" href="{% url 'post-delete' object.id %}"><i class="far fa-trash-alt"></i></a>
-      </div>
-      {% endif %}
+     
     </div>
     <h5 class="article-title">{{ object.title }}</h5>
     <p class="article-content">{{ object.content }}</p>
@@ -58,7 +53,7 @@
               </div>
           </div>
       {% empty %}
-          <p>No comments yet. Be the first to comment!</p>
+          <p>No comments yet. </p>
       {% endfor %}
   </div>
 
